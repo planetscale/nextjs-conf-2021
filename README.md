@@ -27,6 +27,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy this application quickly to Vercel using the following Deploy button:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fplanetscale%2Fnextjs-conf-2021&env=DATABASE_URL&envDescription=Create%20a%20new%20Password%20in%20PlanetScale%20and%20get%20the%20Prisma%20URL.%20Example%3A%20mysql%3A%2F%2F%5Busername%5D%3A%5Bpassword%5D%40%5Bhost%5D%2Fstar-app%3Fsslaccept%3Dstrict&envLink=https%3A%2F%2Fdocs.planetscale.com%2Fconcepts%2Fconnection-strings)
+
+In order to connect your database to your application deployed in Vercel, you will need to set the `DATABASE_URL` variable. This URL is how your Vercel application is able to securely connect to PlanetScale. The URL is in the following format: `mysql://[username]:[password]@[host]/star-app?sslaccept=strict`
+
+You can create a password in PlanetScale and generate this URL in the Connect modal in your database, select "Prisma" to get the Prisma specific URL: 
+
+![Connect modal in PlanetScale app showing passwords](https://cdn.sanity.io/images/f1avhira/production/ecc1910dce37410254a169060a35538976a1fdf5-1624x1298.png)
