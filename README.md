@@ -27,6 +27,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
+> Warning: You need to make sure to follow the steps from the "Databases as Code with PlanetScale and Prisma" talk at Next.js Conference 2021 before deploying to Vercel. 
+
 Deploy this application quickly to Vercel using the following Deploy button:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fplanetscale%2Fnextjs-conf-2021&env=DATABASE_URL&envDescription=Create%20a%20new%20Password%20in%20PlanetScale%20and%20get%20the%20Prisma%20URL.%20Example%3A%20mysql%3A%2F%2F%5Busername%5D%3A%5Bpassword%5D%40%5Bhost%5D%2Fstar-app%3Fsslaccept%3Dstrict&envLink=https%3A%2F%2Fdocs.planetscale.com%2Fconcepts%2Fconnection-strings)
