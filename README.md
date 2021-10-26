@@ -2,28 +2,95 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
 In the demo from the talk, we created and edited an [API route](https://nextjs.org/docs/api-routes/introduction), [http://localhost:3000/api/stars](http://localhost:3000/api/stars). This endpoint can be edited in `pages/api/stars.js`.
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
+## Steps to setup
 
-To learn more about Next.js, take a look at the following resources:
+Prerequisite: You need to have the Prisma and PlanetScale (also known as `pscale`) CLIs installed
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. In PlanetScale, create a `star-app` database
+2. In PlanetScale, in your database's Settings page, check "Automatically copy migration data" and select "Prisma"
+3. In PlanetScale, create an `initial-setup` and `shadow` branch from `main` branch
+4. Locally, run `npx create-next-app@latest --use-npm`
+5. Once this is complete, `cd star-app` and run `npm install @prisma\client`
+6. Run `npx prisma init`
+7. Edit the `prisma/schema.prisma` file to look like this: 
+```
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  refernetialIntegrity = "prisma"
+}
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+model Star {
+  id            Int       @default(autoincrement()) @id
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  name          String    @db.VarChar(255)
+  consellation  String    @db.VarChar(255)
+}
+```
+8. Edit the `.env` file to look like this: 
+```
+DATABASE_URL="mysql://root@127.0.0.1:3309/star-app"
+SHADOW_DATABASE_URL="mysql://root@127.0.0.1:3310/star-app"
+```
+Next, we will use `pscale` CLI to locally proxy into our PlanetScale database.
+9. In a two different terminal tabs, run:
+```
+pscale connect star-app initial-setup --port 3309
+```
+```
+pscale connect star-app shadow --port 3310
+```
+10. Run `prisma migrate dev --name init`
+11. Create `lib/prisma.js` file:
+```javascript
+import { PrismaClient } from '@prisma/client'
+
+const prisma = global.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV === "development") global.prisma = prisma;
+
+export default prisma
+```
+12. Create `pages/api/stars.js` file:
+```javascript
+import prisma from "../../lib/prisma";
+
+export default async function assetHandler(req, res) {
+    const { method } = req;
+
+    switch (method) {
+        case "GET":
+            try {   
+                const stars = await prisma.star.findMany();
+                res.status(200).json(stars);
+            } catch(e) {
+                console.error("Request error", e);
+                res.status(500).json({ error: "Error fetching posts" });
+            }
+            break;
+        default:
+            res.setHeader("Allow", ["GET"]);
+            res.status(405).end(`Method ${method} Not Allowed`);
+            break;
+    }
+}
+```
+13. Add data using `npx prisma studio`, which will open a browser window. After you add data, then close Prisma Studio. 
+14. Run `npm run dev` and navigate to http://localhost:3000/api/stars to see data!
+15. You are now ready to open a deploy request in PlanetScale. Once you have opened a deploy request and merged it. 
+
+You are now ready to deploy to Vercel. Just remember to add data again to your `main` database branch!
 
 ## Deploy on Vercel
 
@@ -38,3 +105,5 @@ In order to connect your database to your application deployed in Vercel, you wi
 You can create a password in PlanetScale and generate this URL in the Connect modal in your database, select "Prisma" to get the Prisma specific URL: 
 
 ![Connect modal in PlanetScale app showing passwords](https://cdn.sanity.io/images/f1avhira/production/ecc1910dce37410254a169060a35538976a1fdf5-1624x1298.png)
+
+> Note: If you see a 404 page after your build is successful, go into your app's Vercel Settings > General > Build & Development Settings and make sure that Next.js is the selected framework.
