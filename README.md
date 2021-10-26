@@ -6,16 +6,27 @@ In the demo from the talk, we created and edited an [API route](https://nextjs.o
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Steps to setup
+## Set up
 
-Prerequisite: You need to have the Prisma and PlanetScale (also known as `pscale`) CLIs installed
+Below are the steps I went through in the "Databases as Code with PlanetScale and Prisma" talk during Next.js Conf.
+
+Prerequisite: You need to have the [Prisma](https://www.prisma.io/docs/concepts/components/prisma-cli/installatio) and [PlanetScale](https://docs.planetscale.com/reference/planetscale-environment-setup) CLIs installed
 
 1. In PlanetScale, create a `star-app` database
-2. In PlanetScale, in your database's Settings page, check "Automatically copy migration data" and select "Prisma"
-3. In PlanetScale, create an `initial-setup` and `shadow` branch from `main` branch
-4. Locally, run `npx create-next-app@latest --use-npm`
-5. Once this is complete, `cd star-app` and run `npm install @prisma\client`
-6. Run `npx prisma init`
+2. In your database's Settings page, check "Automatically copy migration data" and select "Prisma"
+3. Create an `initial-setup` and `shadow` database branches from `main` branch
+4. Locally, run:
+```
+npx create-next-app@latest --use-npm
+```
+5. Once this is complete, run:
+```cd star-app
+npm install @prisma\client
+```
+6. To create the files needed to use Prisma, run:
+```
+npx prisma init
+```
 7. Edit the `prisma/schema.prisma` file to look like this: 
 ```
 datasource db {
@@ -43,15 +54,17 @@ model Star {
 DATABASE_URL="mysql://root@127.0.0.1:3309/star-app"
 SHADOW_DATABASE_URL="mysql://root@127.0.0.1:3310/star-app"
 ```
-Next, we will use `pscale` CLI to locally proxy into our PlanetScale database.
-9. In a two different terminal tabs, run:
+9. Next, we will use `pscale` CLI to locally proxy into our PlanetScale database. In a two different terminal tabs, run:
 ```
 pscale connect star-app initial-setup --port 3309
 ```
 ```
 pscale connect star-app shadow --port 3310
 ```
-10. Run `prisma migrate dev --name init`
+10. Run to create the initial data model and do your first Prisma schema:
+```
+prisma migrate dev --name init
+```
 11. Create `lib/prisma.js` file:
 ```javascript
 import { PrismaClient } from '@prisma/client'
@@ -94,7 +107,7 @@ You are now ready to deploy to Vercel. Just remember to add data again to your `
 
 ## Deploy on Vercel
 
-> Warning: You need to make sure to follow the steps from the "Databases as Code with PlanetScale and Prisma" talk at Next.js Conference 2021 before deploying to Vercel. 
+> Warning: You need to make sure to follow the steps from the "Databases as Code with PlanetScale and Prisma" talk at Next.js Conf before deploying to Vercel. 
 
 Deploy this application quickly to Vercel using the following Deploy button:
 
