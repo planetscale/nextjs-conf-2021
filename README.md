@@ -1,6 +1,6 @@
 # Using Next.js with PlanetScale and Prisma
 
-> Note: The video contains an outdated workflow of using `prisma migrate dev` with a shadow branch. We now recommend using `prisma db push` with no shadow branches. See the documentation on how to do migrations to your schema here: 
+> Update: The talk contains an outdated workflow of using `prisma migrate dev` with a shadow branch. We now recommend using `prisma db push` with no shadow branches. See the documentation on how to do migrations to your schema here: 
 
 This repo corresponds to the "Databases as Code with PlanetScale and Prisma" talk from Next.js Conf 2021.
 
