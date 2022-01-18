@@ -1,5 +1,7 @@
 # Using Next.js with PlanetScale and Prisma
 
+> Important update: This talk contains an outdated workflow of using `prisma migrate dev` with a shadow branch to update your database schema. We now recommend using `prisma db push` with no shadow branches. See the documentation on how to do migrations to your schema here: 
+
 This repo corresponds to the "Databases as Code with PlanetScale and Prisma" talk from Next.js Conf 2021.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
@@ -15,6 +17,7 @@ Below are the steps I went through in the talk during Next.js Conf. You will lik
 1. In PlanetScale, create a `star-app` database
 2. In your database's Settings page, check "Automatically copy migration data" and select "Prisma"
 3. Create an `initial-setup` and `shadow` database branches from `main` branch
+> Note: This talk contains an outdated workflow of using `prisma migrate dev` with a shadow branch to update your database schema. We now recommend using `prisma db push` with no shadow branches. See the documentation on how to do migrations to your schema here: 
 4. Locally, run:
 ```
 npx create-next-app@latest --use-npm
