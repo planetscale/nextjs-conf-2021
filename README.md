@@ -1,6 +1,6 @@
 # Using Next.js with PlanetScale and Prisma
 
-> **Note:** This repository targets PlanetScale Vitess/MySQL. PlanetScale also offers managed PostgreSQL. For more information, see the [PlanetScale Postgres documentation](https://planetscale.com/docs/postgres).
+> **Note:** This repository targets PlanetScale Vitess/MySQL. PlanetScale also offers managed Postgres. For more information, see the [PlanetScale Postgres documentation](https://planetscale.com/docs/postgres).
 
 > Important update: This talk contains an outdated workflow of using `prisma migrate dev` with a shadow branch to update your database schema. We now recommend using `prisma db push` with no shadow branches. See the documentation on how to do migrations to your schema here:
 
